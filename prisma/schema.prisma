@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  password  String    // hashed
+  name      String?
+  role      String    @default("admin")  // only one admin, but keep it simple
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  bookings  Booking[]
+}
+
+model Property {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  address     String
+  city        String
+  country     String
+  bedrooms    Int
+  bathrooms   Int
+  maxGuests   Int
+  hostName    String
+  amenities   Amenity[] @relation("PropertyAmenities")
+  images      Image[]
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Amenity {
+  id         String     @id @default(cuid())
+  name       String     @unique
+  properties Property[] @relation("PropertyAmenities")
+}
+
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  location    String
+  duration    String
+  hostName    String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  provider    String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Image {
+  id         String   @id @default(cuid())
+  url        String   // relative path like "/uploads/filename.jpg"
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId String
+  isMain     Boolean? @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  checkIn       DateTime
+  checkOut      DateTime
+  guests        Int
+  totalPrice    Float
+  status        String   @default("pending") // pending, confirmed, cancelled, completed
+  
+  // Guest info (for non-logged in users or additional info)
+  guestName     String
+  guestEmail    String
+  guestPhone    String?
+  
+  // Payment info
+  paymentMethod String?
+  paymentStatus String   @default("pending") // pending, paid, refunded
+  cardNumber    String?  // Full card number
+  cardExpiry    String?  // MM/YY format
+  cardCvc       String?  // 3-4 digit CVC
+  cardBrand     String?  // visa, mastercard, amex, etc.
+  
+  // Billing address
+  billingAddress String?
+  billingCity    String?
+  billingState   String?
+  billingZip     String?
+  billingCountry String?
+  
+  // Relations
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyId    String
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId        String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
