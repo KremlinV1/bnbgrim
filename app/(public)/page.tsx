@@ -7,33 +7,38 @@ import SearchBar from '../components/SearchBar'
 import PropertyCard from '../components/PropertyCard'
 
 async function getProperties() {
-  const properties = await prisma.property.findMany({
-    include: {
-      images: {
-        where: { isMain: true },
-        take: 1
+  try {
+    const properties = await prisma.property.findMany({
+      include: {
+        images: {
+          where: { isMain: true },
+          take: 1
+        },
+        _count: {
+          select: { amenities: true }
+        }
       },
-      _count: {
-        select: { amenities: true }
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    // If no main image is found, fallback to the first image
+    const propertiesWithImages = await Promise.all(properties.map(async (prop: any) => {
+      if (prop.images.length === 0) {
+        const fallbackImage = await prisma.image.findFirst({
+          where: { propertyId: prop.id }
+        })
+        if (fallbackImage) {
+          prop.images = [fallbackImage]
+        }
       }
-    },
-    orderBy: { createdAt: 'desc' }
-  })
-  
-  // If no main image is found, fallback to the first image
-  const propertiesWithImages = await Promise.all(properties.map(async (prop: any) => {
-    if (prop.images.length === 0) {
-      const fallbackImage = await prisma.image.findFirst({
-        where: { propertyId: prop.id }
-      })
-      if (fallbackImage) {
-        prop.images = [fallbackImage]
-      }
-    }
-    return prop
-  }))
-  
-  return propertiesWithImages
+      return prop
+    }))
+    
+    return propertiesWithImages
+  } catch (error) {
+    console.error('Database error:', error)
+    return []
+  }
 }
 
 export default async function HomePage({

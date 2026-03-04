@@ -19,10 +19,10 @@ export async function GET() {
     })
     
     return NextResponse.json({ properties })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching properties:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch properties' },
+      { error: 'Failed to fetch properties', details: error?.message || 'Unknown error' },
       { status: 500 }
     )
   }
