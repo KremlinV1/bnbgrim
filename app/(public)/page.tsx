@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa'
@@ -52,7 +53,9 @@ export default async function HomePage({
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <Header />
-        <SearchBar />
+        <Suspense fallback={<div className="h-16 bg-gray-100 animate-pulse" />}>
+          <SearchBar />
+        </Suspense>
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pb-12">
