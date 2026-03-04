@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
-import { FaPlus, FaExternalLinkAlt, FaChartBar, FaSignOutAlt, FaCalendarCheck, FaHome, FaUsers } from "react-icons/fa"
+import { FaPlus, FaExternalLinkAlt, FaChartBar, FaSignOutAlt, FaCalendarCheck, FaHome, FaUsers, FaStar, FaConciergeBell } from "react-icons/fa"
 
 interface AdminSidebarProps {
   userEmail: string | null | undefined
@@ -75,6 +75,28 @@ export default function AdminSidebar({ userEmail }: AdminSidebarProps) {
         >
           <FaUsers className={isActive('/admin/users') ? 'text-[#FF385C]' : 'text-slate-400'} />
           Users
+        </Link>
+        <Link 
+          href="/admin/experiences" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+            isActive('/admin/experiences')
+              ? 'bg-slate-800 text-white font-medium'
+              : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+          }`}
+        >
+          <FaStar className={isActive('/admin/experiences') ? 'text-[#FF385C]' : 'text-slate-400'} />
+          Experiences
+        </Link>
+        <Link 
+          href="/admin/services" 
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg transition ${
+            isActive('/admin/services')
+              ? 'bg-slate-800 text-white font-medium'
+              : 'hover:bg-slate-800 text-slate-300 hover:text-white'
+          }`}
+        >
+          <FaConciergeBell className={isActive('/admin/services') ? 'text-[#FF385C]' : 'text-slate-400'} />
+          Services
         </Link>
         <Link 
           href="/" 
