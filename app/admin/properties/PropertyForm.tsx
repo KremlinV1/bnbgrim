@@ -114,8 +114,8 @@ export default function PropertyForm({
               <label className="block text-sm font-medium text-gray-700 mb-1">Price per night ($)</label>
               <input 
                 name="price" 
-                type="number" 
-                step="0.01" 
+                type="text"
+                inputMode="decimal"
                 defaultValue={initialData?.price} 
                 required 
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -170,7 +170,8 @@ export default function PropertyForm({
               <label className="block text-sm font-medium text-gray-700 mb-1">Bedrooms</label>
               <input 
                 name="bedrooms" 
-                type="number" 
+                type="text"
+                inputMode="numeric"
                 defaultValue={initialData?.bedrooms} 
                 required 
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -180,7 +181,8 @@ export default function PropertyForm({
               <label className="block text-sm font-medium text-gray-700 mb-1">Bathrooms</label>
               <input 
                 name="bathrooms" 
-                type="number" 
+                type="text"
+                inputMode="numeric"
                 defaultValue={initialData?.bathrooms} 
                 required 
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -190,7 +192,8 @@ export default function PropertyForm({
               <label className="block text-sm font-medium text-gray-700 mb-1">Max Guests</label>
               <input 
                 name="maxGuests" 
-                type="number" 
+                type="text"
+                inputMode="numeric"
                 defaultValue={initialData?.maxGuests} 
                 required 
                 className="w-full px-3 py-2 border border-gray-300 rounded-md"
