@@ -70,7 +70,7 @@ model Service {
 
 model Image {
   id         String   @id @default(cuid())
-  url        String   // relative path like "/uploads/filename.jpg"
+  url        String   @db.Text // base64 data URL or external URL
   property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   propertyId String
   isMain     Boolean? @default(false)
